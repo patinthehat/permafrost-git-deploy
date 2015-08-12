@@ -1,0 +1,50 @@
+
+body { 
+  padding: 0 1em; 
+  background: #222; 
+  color: #fff; 
+}
+
+h2 {
+  color: #c33;
+}
+
+.error { 
+  color: #c33; 
+}
+
+.prompt {
+  color: #6be234;
+}
+
+.prompt:after {
+  content: '$ ';  
+}
+
+.command { 
+  color: #729fcf; 
+}
+
+.output { 
+  color: #999; 
+}
+
+.inline {
+  display: inline;
+}
+
+.highlight {
+  color: #fff;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
