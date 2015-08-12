@@ -3,10 +3,8 @@
 Automatically deploy a git repository to a server after pushing with minimal configuration.
 
 ---
-
+#####Basis#####
 Permafrost Git Deploy is based on v1.3.1 of the "Simple PHP Git Deploy" script, which can be found at https://github.com/markomarkovic/simple-php-git-deploy/.
-
-Some CSS and shell commands have been borrowed.
 
 ---
 
@@ -50,17 +48,18 @@ The `\RepositoryInfo` class has the following properties that need to be configu
   $deployer = new \Deploy(new \BrowserOutputHtml());
   $deployer->performDeploy($ri);
 ```
-
+_--- see [deploy-sample.php](deploy-sample.php) for a complete deploy script example ---_
 
 ---
 #### Repository Host Configuration ####
 ---
+- You must configure webhooks to pull the url of your `deploy.php` post-push.
 
 - #####Github#####
-  blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+  @todo ---
 
 - #####BitBucket#####
-  blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah 
+  @todo ---
 
 ---
 #### Output ####
@@ -82,6 +81,7 @@ The server you run Permafrost Git Deploy on must have the following installed:
 
   - PHP 5.4+
   - whoami
+  - which
   - git
   - rsync
 
@@ -95,6 +95,12 @@ And optionally, depending on your configuration:
 ---
 
   - Implement a plugin system to allow for things like HipChat integration, mailing output logs, etc. I'd also like to convert the DeployTimer into a plugin.
+
+  - Create a basic authentication class that requires a secret key or something similar to be passed to the URL for deployment to occur.
+
+  - Create a basic authentication class that implements [RFC 2617](http://www.ietf.org/rfc/rfc2617.txt) HTTP Basic and/or Digest Authentication. 
+
+  - Create a class that loads multiple repository configurations and can execute deployment for any of them based on a URL parameter.
 
   - Create a `BrowserOutputText` class that outputs just text and a content type of text/plain.
 
