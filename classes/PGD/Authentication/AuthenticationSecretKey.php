@@ -51,6 +51,7 @@ class AuthenticationSecretKey extends \PGD\Authentication\Authentication
     $methods = array('get' => $_GET, 'post' => $_POST);
     $data = (isset($methods[$this->getMethod()]) ? $methods[$this->getMethod()] : $methods['get']);
     
+    
     if (isset($data[$this->getParamName()]) && 
       $data[$this->getParamName()] === $this->getKey()) {
         return true;  

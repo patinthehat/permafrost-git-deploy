@@ -10,14 +10,28 @@ class AuthenticationDriver
    */
   protected $authenticator;
   
-  public function __construct(\PGD\Authentication\Authentication $auth) 
+  /**
+   * @var \PGD\Output\BrowserOutput
+   */
+  protected $output;
+  
+  public function __construct(\PGD\Output\BrowserOutput $output, \PGD\Authentication\Authentication $auth) 
   {
     $this->authenticator = $auth;
+    $this->output = $output;
   }
 
   public function authenticate()
   {
-    return $this->authenticator->authenticate();    
+    $result = $this->authenticator->authenticate();
+    
+    if ($result) {
+      $this->output->writeQueued('Authorization succeeded.'.PHP_EOL.PHP_EOL, 'output highlight');
+    } else {
+      $this->output->writeQueued('Authorization failed.'.PHP_EOL.PHP_EOL, 'error highlight');
+    }
+    
+    return $result;      
   }
   
 }

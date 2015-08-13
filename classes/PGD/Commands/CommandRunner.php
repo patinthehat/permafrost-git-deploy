@@ -8,7 +8,7 @@ class CommandRunner
   protected $commandTimeLimit;
   protected $commands = array();
 
-  public function __construct(\PGD\BrowserOutput $outputter, $commandTimeLimit = 30) 
+  public function __construct(\PGD\Output\BrowserOutput $outputter, $commandTimeLimit = 30) 
   {
     $this->outputter = $outputter;
     $this->commandTimeLimit = $commandTimeLimit;
@@ -21,7 +21,7 @@ class CommandRunner
   
   /**
    * @param string $name
-   * @return \\Command|boolean
+   * @return \\PGD\Command|boolean
    */
   public function getCommandByName($name)
   {
@@ -31,7 +31,7 @@ class CommandRunner
   }
   
   /**
-   * @return \\PGD\BrowserOutput
+   * @return \\PGD\Output\BrowserOutput
    */
   public function getOutputter()
   {

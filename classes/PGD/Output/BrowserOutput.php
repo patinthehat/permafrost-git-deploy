@@ -6,6 +6,7 @@ abstract class BrowserOutput
 {
   protected $contentType;
   protected $shortcuts = array();
+  protected $writeQueueData = array(); 
     
   public function setContentType($contentType)
   {
@@ -29,6 +30,20 @@ abstract class BrowserOutput
   {
     echo $data;
     $this->flush();
+  }
+  
+  public function writeQueued($data, $dataType = '')
+  {
+    $data = $this->processOutputData($data);
+    $this->writeQueueData[] = $data;
+  }
+  
+  public function writeQueue()
+  {
+    foreach($this->writeQueueData as $wqd) {
+      $this->writeRaw($wqd);
+    }
+    $this->writeQueueData = array();
   }
   
   public function flush()

@@ -84,7 +84,11 @@ class Deploy {
 </head>
 <body>
 <pre>
-      
+');
+    
+    $this->getBrowserOutput()->writeQueue();
+    
+    $this->getBrowserOutput()->writeRaw('
 <div class="output inline highlight bold">Checking the environment ...</div>
 
 ');

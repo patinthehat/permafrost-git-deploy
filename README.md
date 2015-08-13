@@ -41,14 +41,34 @@ The `\RepositoryInfo` class has the following properties that need to be configu
 ```php
 <?php
   include('autoload.php');
-  $ri = new \RepositoryInfo();
+  $ri = new \PGD\RepositoryInfo();
   $ri->name = "test repo";
   ...
   //see above for config properties--all properties must be configured!
-  $deployer = new \Deploy(new \BrowserOutputHtml());
+  $deployer = new \PGD\Deploy(new \PGD\Output\BrowserOutputHtml());
   $deployer->performDeploy($ri);
 ```
-_--- see [deploy-sample.php](deploy-sample.php) for a complete deploy script example ---_
+_see [deploy-sample.php](deploy-sample.php) for a complete deploy script example_
+
+##### Authentication #####
+To enable basic authentication for the deploy script, you must create an `AuthenticationDriver` and pass a class that implements the `Authentication` abstract class to it.
+
+Example using the `AuthenticationSecretKey` class:
+```php
+<?php
+  $browserOutput = new \PGD\Output\BrowserOutputHtml();
+  $auth = new \PGD\Authentication\AuthenticationDriver(
+    $browserOutput, 
+    new \PGD\Authentication\AuthenticationSecretKey("mypassword", "sk", 'get')
+  );
+
+  if ($auth->authenticate() === true) {
+    $d = new \PGD\Deploy($browserOutput);
+    $d->performDeploy($ri);    
+  }
+```
+For the deploy to execute, the following url must be called, assuming it is named `deploy.php`: 
+`deploy.php?key=mypassword`
 
 ---
 #### Repository Host Configuration ####
