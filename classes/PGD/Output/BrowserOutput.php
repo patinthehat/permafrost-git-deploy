@@ -1,5 +1,7 @@
 <?php
 
+namespace PGD\Output;
+
 abstract class BrowserOutput 
 {
   protected $contentType;

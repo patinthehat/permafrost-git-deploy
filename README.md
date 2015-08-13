@@ -96,7 +96,7 @@ And optionally, depending on your configuration:
 
   - Implement a plugin system to allow for things like HipChat integration, mailing output logs, etc. I'd also like to convert the DeployTimer into a plugin.
 
-  - Create a basic authentication class that requires a secret key or something similar to be passed to the URL for deployment to occur.
+  - ~~Create a basic authentication class that requires a secret key or something similar to be passed to the URL for deployment to occur.~~
 
   - Create a basic authentication class that implements [RFC 2617](http://www.ietf.org/rfc/rfc2617.txt) HTTP Basic and/or Digest Authentication. 
 

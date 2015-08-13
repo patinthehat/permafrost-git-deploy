@@ -5,10 +5,10 @@
 spl_autoload_register(function ($class) {
 
   // project-specific namespace prefix
-  $prefix = '';
+  $prefix = 'PGD';
 
   // base directory for the namespace prefix
-  $base_dir = __DIR__ . '/classes/';
+  $base_dir = __DIR__ . '/classes/PGD/';
 
   // does the class use the namespace prefix?
   $len = strlen($prefix);

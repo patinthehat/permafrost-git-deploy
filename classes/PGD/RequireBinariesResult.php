@@ -1,9 +1,11 @@
 <?php
 /**
  * 
- * Stores the results of a \RequireBinaries->checkRequirements() call.
+ * Stores the results of a \PGD\RequireBinaries->checkRequirements() call.
  */
- 
+
+namespace PGD;
+
 class RequireBinariesResult {
   
   protected $result = false;

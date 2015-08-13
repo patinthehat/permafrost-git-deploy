@@ -1,11 +1,13 @@
 <?php
-
 /**
  *
  * Basic data structure to store information about an application,
  * including its name, path, and version information.
  *
  */
+
+namespace PGD;
+
 class ApplicationInfo {
 
   /**

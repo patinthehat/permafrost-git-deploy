@@ -1,5 +1,7 @@
 <?php
 
+namespace PGD;
+
 class RequireBinaries {
 
   /**
@@ -47,22 +49,22 @@ class RequireBinaries {
    * Check for required binaries
    * 
    * @param boolean $exitOnFailure Stop checking requirements on the first binary not found
-   * @return \RequireBinariesResult
+   * @return \PGD\RequireBinariesResult
    */
   public function checkRequirements($exitOnFailure = true)
   {
-    $results = new \RequireBinariesResult(true, array());
+    $results = new \PGD\RequireBinariesResult(true, array());
     
     foreach($this->required as $rb) {
       $path = trim(shell_exec("which $rb"));
       if ($path == '') {
         $results->setResult(false);
-        $results->addData(new \ApplicationInfo($rb, "", false, ""));
+        $results->addData(new \PGD\ApplicationInfo($rb, "", false, ""));
         if ($exitOnFailure)
           return $results;
       } else {
         $version = explode("\n", shell_exec("$rb --version")."\n");
-        $results->addData(new \ApplicationInfo($rb, $path, true, $version[0]));
+        $results->addData(new \PGD\ApplicationInfo($rb, $path, true, $version[0]));
       }      
     }
     return $results;

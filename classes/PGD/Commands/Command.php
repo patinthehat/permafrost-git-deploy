@@ -4,6 +4,9 @@
  * A basic class that runs a shell command and returns the result of execution.
  * @see \CommandResult
  */
+ 
+namespace PGD\Commands;
+
 class Command 
 {
   protected $command;
@@ -58,7 +61,7 @@ class Command
   
   public function execute()
   {
-    $result = new \CommandResult();    
+    $result = new \PGD\Commands\CommandResult();    
     exec($this->getCommand().' 2>&1', $result->output, $result->returnCode);
     return $result;
   }

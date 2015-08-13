@@ -1,12 +1,14 @@
 <?php
 /**
- * @author patrick
+ * @author Patrick Organ
  * 
  * Simple timer class to time the duration of an automated 
  * repository deploy.
  *
  */
- 
+
+namespace PGD;
+
 class DeployTimer {
 
   /**

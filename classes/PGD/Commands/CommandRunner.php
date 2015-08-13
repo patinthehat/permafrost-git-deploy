@@ -1,12 +1,14 @@
 <?php
 
+namespace PGD\Commands;
+
 class CommandRunner 
 {
   protected $outputter;
   protected $commandTimeLimit;
   protected $commands = array();
 
-  public function __construct(\BrowserOutput $outputter, $commandTimeLimit = 30) 
+  public function __construct(\PGD\BrowserOutput $outputter, $commandTimeLimit = 30) 
   {
     $this->outputter = $outputter;
     $this->commandTimeLimit = $commandTimeLimit;
@@ -29,14 +31,14 @@ class CommandRunner
   }
   
   /**
-   * @return \\BrowserOutput
+   * @return \\PGD\BrowserOutput
    */
   public function getOutputter()
   {
     return $this->outputter;
   }
   
-  public function addCommand(\Command $cmd, $commandName = "")
+  public function addCommand(\PGD\Commands\Command $cmd, $commandName = "")
   {
     if (!$commandName || trim($commandName)=='') {
       $this->commands[] = $cmd;
@@ -63,7 +65,7 @@ class CommandRunner
     return $results;
   }
   
-  public function executeSingleCommand(\Command $cmd, $addlDataType = '')
+  public function executeSingleCommand(\PGD\Commands\Command $cmd, $addlDataType = '')
   {
     if (trim($addlDataType)!=='')
       $addlDataType = " $addlDataType";

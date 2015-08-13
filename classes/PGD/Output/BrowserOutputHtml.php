@@ -1,6 +1,8 @@
 <?php
 
-class BrowserOutputHtml extends BrowserOutput
+namespace PGD\Output;
+
+class BrowserOutputHtml extends \PGD\Output\BrowserOutput
 {
  
   public function __construct() 

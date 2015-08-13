@@ -1,5 +1,7 @@
 <?php
 
+namespace PGD\Commands;
+
 class CommandResult 
 {
   public $output;

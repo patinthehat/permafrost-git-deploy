@@ -1,5 +1,7 @@
 <?php
 
+namespace PGD;
+
 class RepositoryInfo {
   
   public $name;

@@ -1,31 +1,33 @@
 <?php
 
+namespace PGD;
+
 class Deploy {
 
   /**
-   * @var \\DeployTimer
+   * @var \\PGD\DeployTimer
    */
   protected $timer;
   
   /**
-   * @var \\RequireBinaries
+   * @var \\PGD\RequireBinaries
    */
   protected $requiredBinaries;
   
   /**
-   * @var \\BrowserOutput
+   * @var \\PGD\Output\BrowserOutput
    */
   protected $browserOutput;
   
   /**
-   * @var \\CommandRunner
+   * @var \\PGD\Commands\CommandRunner
    */
   protected $commandRunner;
   
   public function __construct($browserOutput) {
-    $this->timer = new \DeployTimer(false);
-    $this->requiredBinaries = new \RequireBinaries();
-    $this->commandRunner = new \CommandRunner($browserOutput, 30);
+    $this->timer = new \PGD\DeployTimer(false);
+    $this->requiredBinaries = new \PGD\RequireBinaries();
+    $this->commandRunner = new \PGD\Commands\CommandRunner($browserOutput, 30);
     
     $this->browserOutput = $browserOutput;
     
@@ -67,7 +69,7 @@ class Deploy {
     return $this->browserOutput;
   }
   
-  public function performDeploy(\RepositoryInfo $repositoryInfo)
+  public function performDeploy(\PGD\RepositoryInfo $repositoryInfo)
   {
     ob_start();
     
@@ -103,7 +105,7 @@ class Deploy {
     $this->getTimer()->start();
     
     $this->getBrowserOutput()->write("Running as ", "output inline highlight");
-    $this->getCommandRunner()->executeSingleCommand(new \Command("whoami", true), "inline highlight bold");
+    $this->getCommandRunner()->executeSingleCommand(new \PGD\Commands\Command("whoami", true), "inline highlight bold");
     $this->getBrowserOutput()->writeRaw(".\n\n");
     
     $this->getBrowserOutput()->write(sprintf("Running on host %s", $_SERVER['SERVER_NAME']), "output inline highlight");
@@ -156,7 +158,7 @@ to        {$repositoryInfo->targetDirectory} ...
     
     if (!is_dir($repositoryInfo->tempDirectory)) {
       //temp directory doesn't exist, so clone the remote repository into it.
-      $this->getCommandRunner()->addCommand(\Command::createFmt(
+      $this->getCommandRunner()->addCommand(\PGD\Commands\Command::createFmt(
                   'git clone --depth=1 --branch %s %s %s',
                   true,
                   $repositoryInfo->branch,
@@ -167,7 +169,7 @@ to        {$repositoryInfo->targetDirectory} ...
       // temp directory exists and hopefully already contains the correct remote origin
       // so we'll fetch the changes and reset the contents.
       
-      $this->getCommandRunner()->addCommand(\Command::createFmt(
+      $this->getCommandRunner()->addCommand(\PGD\Commands\Command::createFmt(
         'git --git-dir="%s.git" --work-tree="%s" fetch origin %s',
         true,
         $repositoryInfo->tempDirectory,
@@ -175,7 +177,7 @@ to        {$repositoryInfo->targetDirectory} ...
         $repositoryInfo->branch        
       ));
             
-      $this->getCommandRunner()->addCommand(\Command::createFmt(
+      $this->getCommandRunner()->addCommand(\PGD\Commands\Command::createFmt(
         'git --git-dir="%s.git" --work-tree="%s" reset --hard FETCH_HEAD',
         true,
         $repositoryInfo->tempDirectory,
@@ -185,11 +187,11 @@ to        {$repositoryInfo->targetDirectory} ...
     }
     
     // Update the submodules
-    $this->getCommandRunner()->addCommand(new \Command('git submodule update --init --recursive'));
+    $this->getCommandRunner()->addCommand(new \PGD\Commands\Command('git submodule update --init --recursive'));
 
     // Describe the deployed version
     if ($repositoryInfo->versionFile !== '') {
-      $this->getCommandRunner()->addCommand(\Command::createFmt(
+      $this->getCommandRunner()->addCommand(\PGD\Commands\Command::createFmt(
         'git --git-dir="%s.git" --work-tree="%s" describe --always > %s',
         false,
         $repositoryInfo->tempDirectory,
@@ -203,7 +205,7 @@ to        {$repositoryInfo->targetDirectory} ...
     // without the BACKUP_DIR for the case when it's inside the TARGET_DIR
     if ($repositoryInfo->backup) {
       $backupFileDateFmt = 'YmdHis'; 
-      $this->getCommandRunner()->addCommand(\Command::createFmt(
+      $this->getCommandRunner()->addCommand(\PGD\Commands\Command::createFmt(
         "tar --exclude='%s*' -czf %s/%s-%s-%s.tar.gz %s*",
         true,
         $repositoryInfo->backupDirectory,
@@ -217,7 +219,7 @@ to        {$repositoryInfo->targetDirectory} ...
     
     // Invoke composer
     if ($repositoryInfo->useComposer) {
-      $this->getCommandRunner()->addCommand(\Command::createFmt(
+      $this->getCommandRunner()->addCommand(\PGD\Commands\Command::createFmt(
         'composer --no-ansi --no-interaction --no-progress --working-dir=%s install %s',
         true,
         $repositoryInfo->tempDirectory,
@@ -235,7 +237,7 @@ to        {$repositoryInfo->targetDirectory} ...
       $exclude .= " --exclude=$exc";
     }
     // Deployment command
-    $this->getCommandRunner()->addCommand(\Command::createFmt(
+    $this->getCommandRunner()->addCommand(\PGD\Commands\Command::createFmt(
       'rsync -rltgoDzvO %s %s %s %s',
       true,
       $repositoryInfo->tempDirectory,
@@ -251,7 +253,7 @@ to        {$repositoryInfo->targetDirectory} ...
       //make sure the directory we want to delete exists, and is not /.
       if (is_dir($repositoryInfo->tempDirectory)) {
         if (count(explode(DIRECTORY_SEPARATOR, $repositoryInfo->tempDirectory))>1) {
-          $this->getCommandRunner()->addCommand(\Command::createFmtNamed(
+          $this->getCommandRunner()->addCommand(\PGD\Commands\Command::createFmtNamed(
             'rm -rf %s',
             'cleanup',
             true,

@@ -5,7 +5,8 @@ test.php
 test.html
 hipchat-config.php
 deploy-config.php
-classes/HipChat.php
+classes/PGD/HipChat.php
+HipChat.php
 
 ### Eclipse ###
 *.pydevproject
