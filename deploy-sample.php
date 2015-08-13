@@ -15,8 +15,14 @@
   $ri->backup = false;
   $ri->useComposer = false;
   
-  $d = new \Deploy(new \BrowserOutputHtml());
-  
-  //please note there is no authentication mechanism in use here -- anyone browsing to this
-  //file will cause the deploy to execute.
-  $d->performDeploy($ri);
+  $browserOutput = new \PGD\Output\BrowserOutputHtml();
+  $auth = new \PGD\Authentication\AuthenticationDriver(
+    $browserOutput, 
+    new \PGD\Authentication\AuthenticationSecretKey("mypassword", "sk", 'get')
+  );
+    
+  //browse to deploy.php?sk=mypassword to authenticate  
+  if ($auth->authenticate() === true) {
+    $d = new \PGD\Deploy($browserOutput);
+    $d->performDeploy($ri);    
+  }
