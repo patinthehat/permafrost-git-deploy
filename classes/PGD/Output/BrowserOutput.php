@@ -91,5 +91,10 @@ abstract class BrowserOutput
     die('Forbidden');
   }
   
+  public function http404NotFound()
+  {
+    $this->httpResponse("404 Not Found");
+  }
+  
   abstract protected function processOutputData($data);
 }

@@ -26,9 +26,9 @@ class AuthenticationDriver
     $result = $this->authenticator->authenticate();
     
     if ($result) {
-      $this->output->writeQueued('Authorization succeeded.'.PHP_EOL.PHP_EOL, 'output highlight');
+      $this->output->writeQueued('Authorization succeeded.'.PHP_EOL, 'output highlight');
     } else {
-      $this->output->writeQueued('Authorization failed.'.PHP_EOL.PHP_EOL, 'error highlight');
+      $this->output->writeQueued('Authorization failed.'.PHP_EOL, 'error highlight');
     }
     
     return $result;      
