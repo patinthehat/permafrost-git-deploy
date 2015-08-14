@@ -68,7 +68,48 @@ Example using the `AuthenticationSecretKey` class:
   }
 ```
 For the deploy to execute, the following url must be called, assuming it is named `deploy.php`: 
-`deploy.php?key=mypassword`
+`deploy.php?sk=mypassword`
+
+##### Multiple Repository Deploy Scripts #####
+You probably have multiple repositories and would like to be able to easily deploy any of them from the same script.
+This can be done using the `\PGD\RepositoryInfoCollection` and `\PGD\MultiRepositoryController` classes:
+```php
+<?php
+  include('autoload.php');
+  
+  $ri1 = new \PGD\RepositoryInfo();
+  $ri1->name = 'test1';
+  //...config here...
+  $ri2 = new \PGD\RepositoryInfo();
+  $ri2->name = 'test2';
+  //...config here...
+
+  $repositories = new \PGD\RepositoryInfoCollection();
+  $repositories->add($ri1);
+  $repositories->add($ri2);
+
+  $controller     = new \PGD\MultiRepositoryController($repositories);
+  $auth           = new \PGD\Authentication\AuthenticationSecretKey("mypassword", "sk", 'get');
+  $browserOutput  = new \PGD\Output\BrowserOutputHtml();
+  $authDriver     = new \PGD\Authentication\AuthenticationDriver($browserOutput, $auth);
+
+  if ($authDriver->authenticate() === true) {
+    if ($controller->validRequest()) {
+      $r = $controller->getRequestedRepository();
+      $d = new \PGD\Deploy($browserOutput);
+      $d->performDeploy($r);
+      exit();
+    } else {
+      $browserOutput->writeQueued('Requested repository not found.');
+    }
+  }
+  
+  $browserOutput->writeRaw('<html><body><pre>');
+  $browserOutput->writeQueue();
+  $browserOutput->writeRaw('</pre></body></html>');
+```
+
+The previous script would be executed by requesting `deploy.php?sk=mypassword&repository=test1` -- this would cause the repository configuration named "test1" to deploy.  Similarly, the `repository` parameter could be changed to `test2` to deploy the "test2" repository.
 
 ---
 #### Repository Host Configuration ####
@@ -120,7 +161,7 @@ And optionally, depending on your configuration:
 
   - Create a basic authentication class that implements [RFC 2617](http://www.ietf.org/rfc/rfc2617.txt) HTTP Basic and/or Digest Authentication. 
 
-  - Create a class that loads multiple repository configurations and can execute deployment for any of them based on a URL parameter.
+  - ~~Create a class that loads multiple repository configurations and can execute deployment for any of them based on a URL parameter.~~
 
   - Create a `BrowserOutputText` class that outputs just text and a content type of text/plain.
 
